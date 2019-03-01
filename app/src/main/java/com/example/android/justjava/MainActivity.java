@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
      * This method is called when the order button is clicked.
      */
     public void submitOrder(View view) {
-        // compute the total price of the order
-        int totalPrice = calculatePrice();
+        // Look for the name
+        String name = ((EditText) findViewById(R.id.name)).getText().toString();
 
         // Verify if Whipped cream is selected
         CheckBox cream_cb = (CheckBox) findViewById(R.id.whipped_cream_checkbox);
@@ -43,8 +44,11 @@ public class MainActivity extends AppCompatActivity {
         CheckBox chocolate_cb = (CheckBox) findViewById(R.id.chocolate_checkbox);
         boolean hasChocolate = chocolate_cb.isChecked();
 
+        // compute the total price of the order
+        int totalPrice = calculatePrice(hasWhippedCream, hasChocolate);
+
         // create the string which summarize the order
-        String price = createOrderSummary(totalPrice, hasWhippedCream, hasChocolate);
+        String price = createOrderSummary(name, hasWhippedCream, hasChocolate, totalPrice);
 
         displayMessage(price);
 
@@ -55,11 +59,16 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * This method creates an order summary
+     *
+     * @param name
+     * @param hasCream
+     * @param hasChocolate
+     * @param price
      */
-    private String createOrderSummary(int price, boolean cream, boolean chocolate) {
-        String summary = "Name: Google AB" +
-                "\nAdd whipped cream? " + cream +
-                "\nAdd chocolate? " + chocolate +
+    private String createOrderSummary(String name, boolean hasCream, boolean hasChocolate, int price) {
+        String summary = "Name: " + name +
+                "\nAdd whipped hasCream? " + hasCream +
+                "\nAdd chocolate? " + hasChocolate +
                 "\nQuantity: " + quantity +
                 "\nTotal: $" + price +
                 "\nThank you!";
@@ -70,9 +79,17 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Calculates the price of the order.
      *
+     * @param hasWhippedCream
+     * @param hasChocolate 
      */
-    private int calculatePrice() {
-        return quantity * 5;
+    private int calculatePrice(boolean hasWhippedCream, boolean hasChocolate) {
+        int price = 5;
+        if (hasWhippedCream)
+            price++;
+        if (hasChocolate)
+            price += 2;
+
+        return price * quantity;
     }
 
     /**

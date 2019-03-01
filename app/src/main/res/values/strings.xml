@@ -6,5 +6,7 @@
     <string name="toppings">toppings</string>
     <string name="cream">Whipped cream</string>
     <string name="chocolate">Chocolate</string>
+    <string name="name">Name</string>
+
 
 </resources>
