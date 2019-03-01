@@ -9,6 +9,8 @@
 package com.example.android.justjava;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,7 +23,7 @@ import android.widget.Toast;
  * This app displays an order form to order coffee.
  */
 public class MainActivity extends AppCompatActivity {
-    private int quantity = 2;
+    private int quantity = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +50,30 @@ public class MainActivity extends AppCompatActivity {
         int totalPrice = calculatePrice(hasWhippedCream, hasChocolate);
 
         // create the string which summarize the order
-        String price = createOrderSummary(name, hasWhippedCream, hasChocolate, totalPrice);
+        String summary = createOrderSummary(name, hasWhippedCream, hasChocolate, totalPrice);
 
-        displayMessage(price);
+        // displayMessage(price);
+        sendASummaryEmail(summary);
 
-        Toast monToast = Toast.makeText(this, "Bien joue ++", Toast.LENGTH_SHORT);
-        monToast.show();
+        Toast.makeText(this, "Bien joue ++", Toast.LENGTH_SHORT).show();
 
     }
+
+    /**
+     * Create an intent and send an email to recap the order
+     *
+     * @param summary
+     */
+    private void sendASummaryEmail(String summary) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:"));
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Just Java Order");
+        intent.putExtra(Intent.EXTRA_TEXT, summary);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
 
     /**
      * This method creates an order summary
@@ -80,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
      * Calculates the price of the order.
      *
      * @param hasWhippedCream
-     * @param hasChocolate 
+     * @param hasChocolate
      */
     private int calculatePrice(boolean hasWhippedCream, boolean hasChocolate) {
         int price = 5;
@@ -103,17 +121,26 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method displays the given text on the screen.
      */
-    private void displayMessage(String message) {
-        TextView orderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
-        orderSummaryTextView.setText(message);
-    }
+//    private void displayMessage(String message) {
+//        TextView orderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
+//        orderSummaryTextView.setText(message);
+//    }
 
     public void increment(View view) {
-        displayQuantity(++quantity);
+
+        if (quantity == 100){
+            Toast.makeText(this, "You cannot order more than 100 coffees", Toast.LENGTH_SHORT).show();
+        } else {
+            displayQuantity(++quantity);
+        }
     }
 
     public void decrement(View view) {
-        displayQuantity(--quantity);
+        if (quantity == 1){
+            Toast.makeText(this, "You cannot order less than 1 coffee", Toast.LENGTH_SHORT).show();
+        } else {
+            displayQuantity(--quantity);
+        }
     }
 
 }
