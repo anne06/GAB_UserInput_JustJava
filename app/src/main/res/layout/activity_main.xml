@@ -26,10 +26,20 @@
             android:id="@+id/whipped_cream_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="24dp"
+            android:layout_marginRight="12dp"
+            android:checked="false"
+            android:text="@string/cream"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/chocolate_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
             android:checked="false"
             android:paddingLeft="24dp"
-            android:text="@string/cream"
+            android:text="@string/chocolate"
             android:textSize="16sp" />
 
         <TextView

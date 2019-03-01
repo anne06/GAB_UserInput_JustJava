@@ -32,11 +32,19 @@ public class MainActivity extends AppCompatActivity {
      * This method is called when the order button is clicked.
      */
     public void submitOrder(View view) {
+        // compute the total price of the order
         int totalPrice = calculatePrice();
+
+        // Verify if Whipped cream is selected
         CheckBox cream_cb = (CheckBox) findViewById(R.id.whipped_cream_checkbox);
         boolean hasWhippedCream = cream_cb.isChecked();
 
-        String price = createOrderSummary(totalPrice, hasWhippedCream);
+        // same for the chocolate checkbox
+        CheckBox chocolate_cb = (CheckBox) findViewById(R.id.chocolate_checkbox);
+        boolean hasChocolate = chocolate_cb.isChecked();
+
+        // create the string which summarize the order
+        String price = createOrderSummary(totalPrice, hasWhippedCream, hasChocolate);
 
         displayMessage(price);
 
@@ -48,9 +56,10 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method creates an order summary
      */
-    private String createOrderSummary(int price, boolean cream) {
+    private String createOrderSummary(int price, boolean cream, boolean chocolate) {
         String summary = "Name: Google AB" +
                 "\nAdd whipped cream? " + cream +
+                "\nAdd chocolate? " + chocolate +
                 "\nQuantity: " + quantity +
                 "\nTotal: $" + price +
                 "\nThank you!";
