@@ -13,17 +13,21 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
+
 /**
  * This app displays an order form to order coffee.
  */
 public class MainActivity extends AppCompatActivity {
     private int quantity = 1;
+    private static final String Log_TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         // displayMessage(price);
         sendASummaryEmail(summary);
 
-        Toast.makeText(this, "Bien joue ++", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.good_job, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -67,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private void sendASummaryEmail(String summary) {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse("mailto:"));
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Just Java Order");
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mail_subject));
         intent.putExtra(Intent.EXTRA_TEXT, summary);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
@@ -78,18 +82,20 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method creates an order summary
      *
-     * @param name
+     * @param lastName
      * @param hasCream
      * @param hasChocolate
      * @param price
      */
-    private String createOrderSummary(String name, boolean hasCream, boolean hasChocolate, int price) {
-        String summary = "Name: " + name +
-                "\nAdd whipped hasCream? " + hasCream +
-                "\nAdd chocolate? " + hasChocolate +
-                "\nQuantity: " + quantity +
-                "\nTotal: $" + price +
-                "\nThank you!";
+    private String createOrderSummary(String lastName, boolean hasCream, boolean hasChocolate, int price) {
+        String summary = getString(R.string.complete_name, lastName) +
+                "\n" + getString(R.string.order_summary_whipped_cream, hasCream) +
+                "\n" + getString(R.string.order_summary_chocolate, hasChocolate) +
+                "\n" + getString(R.string.order_summary_quantity, quantity) +
+                "\n" + getString(R.string.order_summary_price,NumberFormat.getCurrencyInstance().format(price))  +
+                "\n" + getString(R.string.thanks);
+
+        Log.d(Log_TAG, summary);
         return (summary);
 
     }
